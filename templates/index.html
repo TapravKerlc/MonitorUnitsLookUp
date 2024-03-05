@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Table Navigation</title>
+    <style>
+    body {
+        font-size: 20px;
+        background-image: url('/static/bg.png');
+        background-repeat: no-repeat;
+        background-attachment: fixed;
+        background-size: 100% 100%;
+    }
+        
+        select, input[type="submit"] {
+            font-size: 20px; /* Increase font size for dropdown menus and buttons */
+            padding: 5px 10px; /* Increase padding for dropdown menus and buttons */
+        }
+    </style>
+</head>
+<body>
+    <h1>Obsevalni časi za XStrahl 200</h1>
+    <h2>Izberi nastavitev:</h2>
+    <form action="/" method="post">
+        <label for="csv">Izberi željeno energijo:</label>
+        <select name="csv" id="csv" autofocus required>
+            {% for csv_file in csv_files %}
+            {% set csv_file_name = csv_file.split('.')[0] %}  <!-- Remove .csv extension -->
+            <option value="{{ csv_file }}">{{ csv_file_name }}</option>
+            {% endfor %}
+        </select>
+        <br>
+        <label for="column">Izberi željen tubus:</label>
+        <select name="column" id="column" required>
+            {% for column in columns %}
+            <option value="{{ column }}" {% if selected_column == column %} selected {% endif %}>{{ column }}</option>
+            {% endfor %}
+        </select>
+        <br>
+        <label for="row">Izberi željeno dozo:</label>
+        <select name="row" id="row" required>
+            {% for row in rows %}
+            <option value="{{ row }}" {% if selected_row == row %} selected {% endif %}>{{ row }}</option>
+            {% endfor %}
+        </select>
+        <br>
+        <input type="submit" value="Submit">
+    </form>
+
+    {% if data %}
+    <h1>Izračunani čas: {{ data }} MU</h1>
+    {% set selected_csv = selected_csv.split('.')[0] %}  <!-- Remove .csv extension -->
+    <p>Še enkrat preveri!</p>
+    <p>Energija: {{ selected_csv }}</p>
+    <p>{{ selected_column }}</p>
+    <p>Doza: {{ selected_row }}</p>
+    {% endif %}
+    <div style="position: fixed; bottom: 10px; right: 10px; font-size: 14px; color: #666;">Naredil Luka Komar</div>
+</body>
+</html>
